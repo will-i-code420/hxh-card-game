@@ -1,6 +1,5 @@
 <template>
-  <section id="home">
-    <h2>Pick Your Character</h2>
+  <section id="game-container">
     <Character />
   </section>
 </template>

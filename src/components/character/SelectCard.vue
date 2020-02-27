@@ -1,8 +1,8 @@
 <template>
   <section id="char-selection">
-    <div :class="`char-select-card ${character.name.toLowerCase()}`" v-for="character in characters" :key="character.name">
+    <div :class="`char-select-card ${character.name.toLowerCase()}`" v-for="(character, idx) in characters" :key="character.name">
       <img :src="getImgUrl(character.img)" :alt="character.name"/>
-      <h3>{{character.name}}</h3>
+      <h2>{{character.name}}</h2>
       <div class="char-select-stats">
         <p class="stat-name">Nen: <span class="stat">{{character.nen}}</span></p>
         <p class="stat-name">Health: <span class="stat">{{character.health}}</span></p>
@@ -14,7 +14,7 @@
       <p class="char-description">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
       </p>
-      <button @click="selectChar(character.name)">Select</button>
+      <button @click="selectChar(idx)">Select</button>
     </div>
   </section>
 </template>
@@ -31,8 +31,8 @@ export default {
     getImgUrl(img) {
       return require('@/assets/images/'+img)
     },
-    selectChar(name) {
-      this.$emit('select-char', name)
+    selectChar(idx) {
+      this.$emit('select-char', idx)
     }
   }
 }
