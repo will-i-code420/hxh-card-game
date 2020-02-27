@@ -52,6 +52,7 @@ export default {
     align-items: center;
     margin: 1rem auto;
     border: 3px solid black;
+    border-radius: 10px;
 
     img {
       width: 200px;
@@ -61,7 +62,7 @@ export default {
     }
 
     h3 {
-      margin: 1rem 0;
+      margin: .6rem 0;
       font-size: 28px;
     }
 
@@ -70,6 +71,7 @@ export default {
 
       .stat-name {
         font-size: 18px;
+        padding: .15rem 0;
       }
 
       .stat {
@@ -87,6 +89,7 @@ export default {
       padding: .75rem 0;
       color: white;
       background-color: green;
+      border-radius: 10px;
 
       &:hover {
         cursor: pointer;

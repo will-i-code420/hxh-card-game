@@ -1,5 +1,5 @@
 <template>
-  <SelectCard @select-char="setChar"/>
+  <SelectCard v-if="currentView === 'Select'" @select-char="setChar"/>
 </template>
 
 <script>
@@ -9,7 +9,8 @@ export default {
   name: 'Character',
   data() {
     return {
-      currentView: 'Select'
+      currentView: 'Select',
+      enemySelect: false
     }
   },
   components: {
@@ -17,8 +18,16 @@ export default {
   },
   methods: {
     setChar(char) {
-      console.log(char)
-      //create function to set player1 and random opponent
+      this.$store.dispatch('setPlayer1', char)
+      this.enemySelect = true
+      this.selectEnemy()
+    },
+    selectEnemy() {
+      let characters = this.$store.state.characters
+      let enemyIndex = Math.floor(Math.random() * characters.length)
+      this.$store.dispatch('setPlayer2', enemyIndex)
+      this.enemySelect = false
+      this.currentView = 'Fight'
     }
   }
 }

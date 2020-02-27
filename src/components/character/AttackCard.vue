@@ -7,13 +7,13 @@
 
     </div>
     <div class="card-actions">
-      <button type="button" name="button" @click="">
+      <button @click="">
 
       </button>
-      <button type="button" name="button" @click="">
+      <button @click="">
 
       </button>
-      <button type="button" name="button" @click="">
+      <button @click="">
 
       </button>
     </div>
