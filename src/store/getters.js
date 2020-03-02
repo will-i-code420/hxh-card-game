@@ -1,8 +1,5 @@
 export default {
-  getPlayer1: state => {
-    return state.player1
+  getPlayers: state => {
+    return [state.player1, state.player2]
   },
-  getPlayer2: state => {
-    return state.player2
-  }
 }

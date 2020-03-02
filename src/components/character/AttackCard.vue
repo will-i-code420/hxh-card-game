@@ -35,7 +35,12 @@
 export default {
   name: 'AttackCard',
   props: {
-    players: Array
+    activePlayer: Number
+  },
+  computed: {
+    players() {
+      return this.$store.getters.getPlayers
+    }
   },
   methods: {
     getImgUrl(img) {
@@ -43,6 +48,20 @@ export default {
     },
     action(action) {
       this.$emit('action', action)
+    },
+    enemyAction() {
+      let selectedAction = 'attack'
+      this.action(selectedAction)
+    }
+  },
+  watch: {
+    activePlayer: {
+      immediate: true,
+      handler() {
+        if (this.activePlayer === 2) {
+          this.enemyAction()
+        }
+      }
     }
   }
 }
