@@ -43,5 +43,11 @@ export default {
   updateHealth(state, damage) {
     let attackedPlayer = !state.player1.active ? state.player1 : state.player2
     attackedPlayer.health -= damage
+  },
+  gameOver(state) {
+    let deadPlayer = !state.player1.active ? state.player1 : state.player2
+    let winner = state.player1.active ? state.player1 : state.player2
+    deadPlayer.health = 0
+    winner.win = true
   }
 }

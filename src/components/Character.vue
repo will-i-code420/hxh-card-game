@@ -65,8 +65,16 @@ export default {
         this.$store.dispatch('removeDefense')
       }
       let totalDamage = damage - defense
-      this.$store.dispatch('updateHealth', totalDamage)
-      this.$store.dispatch('changeTurn')
+      if (totalDamage <= 0) {
+        totalDamage = 0
+      }
+      if (this.checkHealth(totalDamage)) {
+        this.$store.dispatch('gameOver')
+        this.currentView = 'Game Over'
+      } else {
+        this.$store.dispatch('updateHealth', totalDamage)
+        this.$store.dispatch('changeTurn')
+      }
     },
     defend() {
       let defendingPlayer = this.$store.state.player1.active ? this.$store.state.player1 : this.$store.state.player2
@@ -80,8 +88,8 @@ export default {
       this.$store.dispatch('changeTurn')
     },
     special() {
-      let specialAttacker = this.activePlayer === 1 ? this.$store.state.player1 : this.$store.state.player2
-      let defendingPlayer = this.activePlayer === 1 ? this.$store.state.player2 : this.$store.state.player1
+      let specialAttacker = this.$store.state.player1.active ? this.$store.state.player1 : this.$store.state.player2
+      let defendingPlayer = this.$store.state.player1.active ? this.$store.state.player2 : this.$store.state.player1
       /* create special attack and calc damage/defense */
       let damage = Math.floor((specialAttacker.power * 4) / 10)
       let defense = 0
@@ -90,9 +98,25 @@ export default {
         this.$store.dispatch('removeDefense')
       }
       let totalDamage = damage - defense
-      this.$store.dispatch('removeNen')
-      this.$store.dispatch('updateHealth', totalDamage)
-      this.$store.dispatch('changeTurn')
+      if (totalDamage <= 0) {
+        totalDamage = 0
+      }
+      if (this.checkHealth(totalDamage)) {
+        this.$store.dispatch('gameOver')
+        this.currentView = 'Game Over'
+      } else {
+        this.$store.dispatch('removeNen')
+        this.$store.dispatch('updateHealth', totalDamage)
+        this.$store.dispatch('changeTurn')
+      }
+    },
+    checkHealth(damage) {
+      let damagedPlayer = this.$store.state.player1.active ? this.$store.state.player2 : this.$store.state.player1
+      if (damagedPlayer.health - damage <= 0) {
+        return true
+      } else {
+        return false
+      }
     }
   }
 }

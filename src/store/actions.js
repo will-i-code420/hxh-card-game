@@ -25,5 +25,8 @@ export default {
   },
   updateHealth({commit}, damage) {
     commit('updateHealth', damage)
+  },
+  gameOver({commit}) {
+    commit('gameOver')
   }
 }

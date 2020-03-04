@@ -23,7 +23,7 @@
         <button @click="action('defend')">
           Defend
         </button>
-        <button @click="action('special')">
+        <button @click="action('special')" :disabled="player.nenLevel < 30">
           Special
         </button>
       </div>
@@ -37,7 +37,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'AttackCard',
   computed: {
-    ...mapState(['player2']),
+    ...mapState(['player1', 'player2']),
     players() {
       return this.$store.getters.getPlayers
     }
