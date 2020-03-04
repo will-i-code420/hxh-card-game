@@ -1,6 +1,6 @@
 <template>
   <section id="char-selection">
-    <div :class="`char-select-card ${character.name.toLowerCase()}`" v-for="(character, idx) in characters" :key="character.name">
+    <div :class="`char-select-card ${character.name.toLowerCase()}`" v-for="(character, idx) in characters" :key="character.id">
       <img :src="getImgUrl(character.img)" :alt="character.name"/>
       <h2>{{character.name}}</h2>
       <div class="char-select-stats">

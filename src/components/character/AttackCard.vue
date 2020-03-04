@@ -32,12 +32,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'AttackCard',
-  props: {
-    activePlayer: Number
-  },
   computed: {
+    ...mapState(['player2']),
     players() {
       return this.$store.getters.getPlayers
     }
@@ -51,15 +51,17 @@ export default {
     },
     enemyAction() {
       let selectedAction = 'attack'
+      console.log(`enemy turn, ${selectedAction}`)
       this.action(selectedAction)
     }
   },
   watch: {
-    activePlayer: {
+    player2: {
       immediate: true,
+      deep: true,
       handler() {
-        if (this.activePlayer === 2) {
-          this.enemyAction()
+        if (this.player2.active) {
+          return this.enemyAction()
         }
       }
     }

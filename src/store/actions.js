@@ -1,20 +1,29 @@
 export default {
-  setPlayer1({commit}, char) {
-    commit('setPlayer1', char)
+  setPlayer1({commit}, idx) {
+    commit('setPlayer1', idx)
   },
   setPlayer2({commit}, idx) {
     commit('setPlayer2', idx)
   },
-  setDefense({commit}, player) {
-    commit('setDefense', player)
+  setTurn({commit}, id) {
+    commit('setTurn', id)
   },
-  removeDefense({commit}, player) {
-    commit('removeDefense', player)
+  changeTurn({commit}) {
+    commit('changeTurn')
   },
-  addNen({commit}, player) {
-    commit('addNen', player)
+  setDefense({commit}) {
+    commit('setDefense')
   },
-  removeNen({commit}, player) {
-    commit('removeNen', player)
+  removeDefense({commit}) {
+    commit('removeDefense')
   },
+  addNen({commit}, nen) {
+    commit('addNen', nen)
+  },
+  removeNen({commit}) {
+    commit('removeNen')
+  },
+  updateHealth({commit}, damage) {
+    commit('updateHealth', damage)
+  }
 }

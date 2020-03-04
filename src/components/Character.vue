@@ -1,6 +1,6 @@
 <template>
   <SelectCard v-if="currentView === 'Select'" @select-char="setChar"/>
-  <AttackCard v-else-if="currentView === 'Fight'" @action="charAction" :activePlayer="activePlayer" />
+  <AttackCard v-else-if="currentView === 'Fight'" @action="charAction" />
 </template>
 
 <script>
@@ -12,8 +12,7 @@ export default {
   data() {
     return {
       currentView: 'Select',
-      enemySelect: false,
-      activePlayer: 1
+      enemySelect: false
     }
   },
   components: {
@@ -29,13 +28,16 @@ export default {
     async selectEnemy() {
       let enemyIndex = await Math.floor(Math.random() * this.$store.state.characters.length)
       await this.$store.dispatch('setPlayer2', enemyIndex)
+      await this.setTurn()
       this.enemySelect = false
-      if (this.$store.state.player1.speed >= this.$store.state.player2.speed) {
-        this.activePlayer = 1
-      } else {
-        this.activePlayer = 2
-      }
       this.currentView = 'Fight'
+    },
+    setTurn() {
+      if (this.$store.state.player1.speed >= this.$store.state.player2.speed) {
+        this.$store.dispatch('setTurn', 1)
+      } else {
+        this.$store.dispatch('setTurn', 2)
+      }
     },
     getImgUrl(img) {
       return require('@/assets/images/'+img)
@@ -54,43 +56,43 @@ export default {
       }
     },
     attack() {
-      let attackingPlayer = this.activePlayer === 1 ? this.$store.state.player1 : this.$store.state.player2
-      let defendingPlayer = this.activePlayer === 1 ? this.$store.state.player2 : this.$store.state.player1
+      let attackingPlayer = this.$store.state.player1.active ? this.$store.state.player1 : this.$store.state.player2
+      let defendingPlayer = this.$store.state.player1.defending ? this.$store.state.player1 : this.$store.state.player2
       let damage = Math.floor((attackingPlayer.power * 2) / 10)
       let defense = 0
-      if (defendingPlayer.action === 'defense') {
+      if (defendingPlayer.defenseActive) {
         defense = Math.floor(defendingPlayer.defense / 2)
+        this.$store.dispatch('removeDefense')
       }
       let totalDamage = damage - defense
-      alert(`${defendingPlayer.name} blocked ${defense} of damage`)
-      alert(`${attackingPlayer.name} did ${totalDamage}`)
-      this.$store.dispatch('removeDefense', defendingPlayer.name)
-      this.changeTurn()
-      //this.$store.dispatch('updateHealth', damage, idx)
+      this.$store.dispatch('updateHealth', totalDamage)
+      this.$store.dispatch('changeTurn')
     },
     defend() {
-      let defendingPlayer = this.activePlayer === 1 ? this.$store.state.player1 : this.$store.state.player2
-      this.$store.dispatch('setDefense', this.activePlayer)
-      this.$store.dispatch('addNen', this.activePlayer)
-      alert(`${defendingPlayer.name} is defending next turn & gained 30 nen`)
-      /* create checks for nenLevel for charging */
-      this.changeTurn()
+      let defendingPlayer = this.$store.state.player1.active ? this.$store.state.player1 : this.$store.state.player2
+      this.$store.dispatch('setDefense')
+      if (defendingPlayer.nenLevel > 70) {
+        let nenAmount = 100 - defendingPlayer.nenLevel
+        this.$store.dispatch('addNen', nenAmount)
+      } else {
+        this.$store.dispatch('addNen')
+      }
+      this.$store.dispatch('changeTurn')
     },
     special() {
       let specialAttacker = this.activePlayer === 1 ? this.$store.state.player1 : this.$store.state.player2
       let defendingPlayer = this.activePlayer === 1 ? this.$store.state.player2 : this.$store.state.player1
       /* create special attack and calc damage/defense */
-      alert(`${specialAttacker.name} special attack, player lost 30-50 nen`)
-      this.$store.dispatch('removeNen', this.activePlayer)
-      this.$store.dispatch('removeDefense', defendingPlayer.name)
-      this.changeTurn()
-    },
-    changeTurn() {
-      if (this.activePlayer === 1) {
-        this.activePlayer = 2
-      } else {
-        this.activePlayer = 1
+      let damage = Math.floor((specialAttacker.power * 4) / 10)
+      let defense = 0
+      if (defendingPlayer.action === 'defense') {
+        defense = Math.floor(defendingPlayer.defense / 2)
+        this.$store.dispatch('removeDefense')
       }
+      let totalDamage = damage - defense
+      this.$store.dispatch('removeNen')
+      this.$store.dispatch('updateHealth', totalDamage)
+      this.$store.dispatch('changeTurn')
     }
   }
 }
